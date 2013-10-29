@@ -6,7 +6,7 @@
 // pins for the LEDs:
 const int dirPin = 4;
 const int stepPin = 5;
-
+int val=0;
 
 void setup() {
   // initialize serial:
@@ -23,13 +23,25 @@ void loop() {
 
     // look for the next valid integer in the incoming serial stream:
     int stepSize = Serial.parseInt(); 
+    
     if (stepSize<0){
-      digitalWrite(dirPin,digitalRead(dirPin)); 
+      if (val == HIGH) {
+         val=LOW;        
+      } else {
+         val=HIGH;
+      } 
+      digitalWrite(dirPin, val);
+      stepSize=stepSize-(2*stepSize); //because somehow 2 x a neg number isnt positive...
     }
       Serial.println("ok");
-    }
+      for(int x=0;x<stepSize;x++){
+          digitalWrite(stepPin,HIGH);
+          delay(1);
+          digitalWrite(stepPin,LOW);
+      }  
   }
-}
+  }
+
 
 
 
